@@ -4,9 +4,17 @@
 
 (def colors ["red" "green" "blue"])
 
+(defn color-changer
+  [old]
+  (loop []
+    (let [color (get colors (rand-int 3))]
+      (if (not= color old)
+        color
+        (recur)))))
+
 (defn click!
   [app-state]
-  (om/update! app-state :color (get colors (rand-int 3))))
+  (om/transact! app-state :color color-changer))
 
 (defn component
   [app-state owner opts]
