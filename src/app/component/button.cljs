@@ -1,22 +1,14 @@
 (ns app.component.button
-  (:require [om.core :as om :include-macros true]
-            [sablono.core :as html :refer-macros [html]]))
-
-(def colors ["red" "green" "blue"])
-
-(defn color-changer
-  [old]
-  (loop []
-    (let [color (get colors (rand-int 3))]
-      (if (not= color old)
-        color
-        (recur)))))
+  (:require
+    [cljs.core.async :refer [put!]]
+    [om.core :as om :include-macros true]
+    [sablono.core :as html :refer-macros [html]]))
 
 (defn click!
-  [app-state]
-  (om/transact! app-state :color color-changer))
+  [event-ch]
+  (put! event-ch [:change-color {}]))
 
 (defn component
-  [app-state owner opts]
+  [app-state owner {:keys [event-ch] :as opts}]
   (om/component
-    (html [:button {:onClick #(click! app-state)} "button"])))
+    (html [:button {:onClick #(click! event-ch)} "button"])))
