@@ -1,31 +1,26 @@
 (ns app.core
   (:require [om.core :as om :include-macros true]
-            [sablono.core :as html :refer-macros [html]]))
+            [sablono.core :as html :refer-macros [html]]
+            [app.component.pad :as pad]
+            [app.component.button :as button]))
+
 
 ;; Sends "println" to the Javascript console
 (enable-console-print!)
 
-(def app-state (atom {:text "Hello Turkey"}))
+(def app-state (atom {:color "blue"}))
 
 (defn- root-frame
   [{:keys [text] :as app-state} owner]
   (reify
-    om/IInitState
-    (init-state [_]
-      {:tag "green"})
     om/IWillMount
     (will-mount [_]
       (println "will mount"))
-    om/IDidMount
-    (did-mount [_]
-      (println "did mount"))
     om/IRenderState
-    (render-state [_ {:keys [tag] :as state}]
-      (html [:div {:ref "top"
-                   :className "TopView Box"
-                   :style {:background-color "#ccccff"}}
-              [:h1 text]
-              [:button tag]]))))
+    (render-state [_ _]
+      (html [:div
+              (om/build pad/component app-state {})
+              (om/build button/component app-state {})]))))
 
 (defn- root-frame-simple
   [app owner]
