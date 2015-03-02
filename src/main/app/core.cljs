@@ -1,4 +1,4 @@
-(ns app.core
+(ns ^:figwheel-always app.core
   (:require-macros
     [cljs.core.async.macros :refer [go-loop]])
   (:require
@@ -14,7 +14,8 @@
 
 (def colors ["red" "green" "blue"])
 
-(def app-state (atom {:color "blue"}))
+;; defined once so that it doesn't get over-written on reload
+(defonce app-state (atom {:color "blue"}))
 
 (defn color-changer
   [old]
